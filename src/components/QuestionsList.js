@@ -8,8 +8,16 @@ class QuestionsList extends Component {
     this.props.dispatch(handleUsersData());
   }
   render() {
-    return <div className="QuestionsList">List of questions</div>;
+    return <div className="QuestionsList"></div>;
   }
 }
 
-export default connect()(QuestionsList);
+function mapStateToProps({ authedUser, questions, users }) {
+  return {
+    questions,
+    users,
+    authedUser
+  };
+}
+
+export default connect(mapStateToProps)(QuestionsList);
