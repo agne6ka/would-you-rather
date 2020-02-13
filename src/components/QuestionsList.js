@@ -1,7 +1,15 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { handleQuestionsData, handleUsersData } from "../actions/shared";
 
-function QuestionsList() {
-  return <div className="QuestionsList">QuestionsList</div>;
+class QuestionsList extends Component {
+  componentDidMount() {
+    this.props.dispatch(handleQuestionsData());
+    this.props.dispatch(handleUsersData());
+  }
+  render() {
+    return <div className="QuestionsList">List of questions</div>;
+  }
 }
 
-export default QuestionsList;
+export default connect()(QuestionsList);
