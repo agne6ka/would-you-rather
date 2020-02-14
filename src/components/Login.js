@@ -61,9 +61,8 @@ const Login = props => {
   );
 };
 
-function mapStateToProps({ authedUser, questions, users }) {
+function mapStateToProps({ authedUser, users }) {
   return {
-    questions,
     users,
     authedUser
   };

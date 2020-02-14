@@ -3,6 +3,7 @@ import Nav from "./Nav";
 import QuestionsList from "./QuestionsList";
 import Login from "./Login";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 const theme = createMuiTheme({
@@ -19,16 +20,26 @@ const theme = createMuiTheme({
   }
 });
 
+const useStyles = makeStyles(theme => ({
+  margin: {
+    marginTop: 100
+  },
+  background: {
+    backgroundColor: "#EFEFEF"
+  }
+}));
+
 function App() {
+  const classes = useStyles();
   return (
     <ThemeProvider theme={theme}>
       <Nav />
-      <Grid container>
-        <Grid item xs={12}>
-          <Login />
+      <Grid container justify="center" className={classes.background}>
+        <Grid item xs={6} className={classes.margin}>
+          <QuestionsList />
         </Grid>
         <Grid item xs={12}>
-          <QuestionsList />
+          <Login />
         </Grid>
       </Grid>
     </ThemeProvider>
