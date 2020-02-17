@@ -1,10 +1,12 @@
 import React from "react";
-import Nav from "./Nav";
-import QuestionsList from "./QuestionsList";
-import Login from "./Login";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import NewQuestion from "./NewQuestion";
+import QuestionsList from "./QuestionsList";
+import Nav from "./Nav";
+import Login from "./Login";
 
 const theme = createMuiTheme({
   palette: {
@@ -32,17 +34,18 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const classes = useStyles();
   return (
-    <ThemeProvider theme={theme}>
-      <Nav />
-      <Grid container justify="center" className={classes.background}>
-        <Grid item xs={6} className={classes.margin}>
-          <QuestionsList />
+    <Router>
+      <ThemeProvider theme={theme}>
+        <Nav />
+        <Grid container justify="center" className={classes.background}>
+          <Grid item xs={6} className={classes.margin}>
+            <Login />
+            <Route exact path="/" component={QuestionsList} />
+            <Route path="/new" component={NewQuestion} />
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Login />
-        </Grid>
-      </Grid>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Router>
   );
 }
 

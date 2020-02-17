@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Switch, Route, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,7 +8,6 @@ import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
@@ -35,6 +34,7 @@ function Nav() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const open = Boolean(anchorEl);
+  const paths = ["/", "/new", "/leaderboard"];
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -44,7 +44,7 @@ function Nav() {
     setAnchorEl(null);
   };
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (e, newValue) => {
     setValue(newValue);
   };
 
@@ -61,10 +61,15 @@ function Nav() {
             aria-label="simple tabs example"
             className={classes.tabs}
           >
-            <Tab label="Homepage" />
-            <Tab label="New question" />
-            <Tab label="Leader board" />
+            <Tab label="Homepage" component={Link} to={paths[0]} />
+            <Tab label="New question" component={Link} to={paths[1]} />
+            <Tab label="Leader board" component={Link} to={paths[2]} />
           </Tabs>
+          <Switch>
+            <Route path={paths[0]} />
+            <Route path={paths[1]} />
+            <Route path={paths[2]} />
+          </Switch>
           <div>
             <Typography variant="subtitle1" className={classes.text}>
               Hello User
