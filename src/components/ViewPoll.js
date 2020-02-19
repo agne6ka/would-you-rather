@@ -11,6 +11,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
+import { handleAddAnswer } from "../actions/questions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +47,7 @@ function ViewPoll(props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(value);
+    props.dispatch(handleAddAnswer(param.id, value));
   };
   return (
     <div className="QuestionItem">
@@ -97,10 +98,11 @@ function ViewPoll(props) {
   );
 }
 
-function mapStateToProps({ questions, users }) {
+function mapStateToProps({ questions, users, authedUser }) {
   return {
     users,
-    questions
+    questions,
+    authedUser
   };
 }
 
