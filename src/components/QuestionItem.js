@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -22,7 +23,7 @@ const useStyles = makeStyles({
 
 function QuestionItem(props) {
   const classes = useStyles();
-  const { userName, avatarURL, optionOne, optionTwo } = props;
+  const { id, userName, avatarURL, optionOne, optionTwo } = props;
   return (
     <div className="QuestionItem">
       <Card className={classes.root}>
@@ -46,7 +47,12 @@ function QuestionItem(props) {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="secondary">
+          <Button
+            size="small"
+            color="secondary"
+            component={Link}
+            to={`/question/${id}`}
+          >
             VIEW POLL
           </Button>
         </CardActions>

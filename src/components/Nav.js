@@ -1,5 +1,5 @@
-import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, Switch, Route, NavLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -30,11 +30,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Nav() {
+  let location = useLocation().pathname;
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [value, setValue] = React.useState(0);
-  const open = Boolean(anchorEl);
   const paths = ["/", "/new", "/leaderboard"];
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [value, setValue] = useState(
+    paths.indexOf(location) > 0 ? paths.indexOf(location) : 0
+  );
+  const open = Boolean(anchorEl);
+
+  //ToDo: fix 404 `Tabs component is invalid` error
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -61,9 +66,9 @@ function Nav() {
             aria-label="simple tabs example"
             className={classes.tabs}
           >
-            <Tab label="Homepage" component={Link} to={paths[0]} />
-            <Tab label="New question" component={Link} to={paths[1]} />
-            <Tab label="Leader board" component={Link} to={paths[2]} />
+            <Tab label="Homepage" component={NavLink} to={paths[0]} />
+            <Tab label="New question" component={NavLink} to={paths[1]} />
+            <Tab label="Leader board" component={NavLink} to={paths[2]} />
           </Tabs>
           <Switch>
             <Route path={paths[0]} />

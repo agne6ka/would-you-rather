@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { handleQuestionsData, handleUsersData } from "../actions/shared";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -44,11 +43,6 @@ class QuestionsList extends Component {
     value: 0
   };
 
-  componentDidMount() {
-    this.props.dispatch(handleQuestionsData());
-    this.props.dispatch(handleUsersData());
-  }
-
   render() {
     const { users, authedUser, questions } = this.props;
 
@@ -79,6 +73,7 @@ class QuestionsList extends Component {
               return (
                 <QuestionItem
                   key={question.id}
+                  id={question.id}
                   userName={users[question.author].name}
                   avatarURL={users[question.author].avatarURL}
                   optionOne={question.optionOne.text}
@@ -89,11 +84,13 @@ class QuestionsList extends Component {
         </TabPanel>
         <TabPanel value={this.state.value} index={1}>
           {authedUser &&
+            Object.entries(questions).length !== 0 &&
             Object.keys(users[authedUser].answers).map(answerId => {
               const author = questions[answerId].author;
               return (
                 <QuestionItem
                   key={answerId}
+                  id={answerId}
                   userName={users[author].name}
                   avatarURL={users[author].avatarURL}
                   optionOne={questions[answerId].optionOne.text}
