@@ -8,11 +8,14 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
+import Badge from "@material-ui/core/Badge";
+import Image from "material-ui-image";
 
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: "100%",
-    margin: "20px auto"
+    margin: "20px auto",
+    position: "relative"
   },
   media: {
     width: 80,
@@ -34,29 +37,50 @@ const useStyles = makeStyles(theme => ({
     display: "inline"
   },
   name: {
-    textAlign: "right"
+    textAlign: "right",
+    height: 80,
+    lineHeight: 80
+  },
+  score: {
+    backgroundColor: "#F6AE2D",
+    color: "#2F4858",
+    marginBottom: 10
+  },
+  badge: {
+    position: "absolute",
+    bottom: "25%",
+    right: 38
+  },
+  badgeContent: {
+    color: "#2F4858",
+    transform: "translateX(-50%)"
+  },
+  medal: {
+    width: 90,
+    position: "absolute",
+    left: 0,
+    top: 10,
+    zIndex: 10
   }
 }));
 
 function LeaderBoardItem(props) {
   const classes = useStyles();
-  const { avatarURL, userName, answers, questions, score } = props;
+  const { avatarURL, userName, answers, questions, score, place } = props;
 
   return (
     <div>
       <Card className={classes.root}>
         <CardContent>
+          <div className={classes.medal}>
+            <Image src={`/img/medal_${place + 1}.svg`} />
+          </div>
           <Avatar
             variant="rounded"
             className={classes.media}
             src={avatarURL}
           ></Avatar>
-          <Typography
-            className={classes.name}
-            gutterBottom
-            variant="h5"
-            component="h2"
-          >
+          <Typography className={classes.name} variant="h5" component="h2">
             {userName}
           </Typography>
           <List className={classes.list}>
@@ -77,6 +101,19 @@ function LeaderBoardItem(props) {
             </ListItem>
             <Divider variant="middle" component="li" />
           </List>
+          <Badge
+            className={classes.badge}
+            overlap="rectangle"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right"
+            }}
+            badgeContent={
+              <Typography className={classes.badgeContent}>score</Typography>
+            }
+          >
+            <Avatar className={classes.score}>{score}</Avatar>
+          </Badge>
         </CardContent>
       </Card>
     </div>

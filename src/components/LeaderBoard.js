@@ -9,10 +9,11 @@ function LeaderBoard(props) {
 
   return (
     <div>
-      {Object.values(users).map(user => {
+      {Object.values(users).map((user, index) => {
         return (
           <LeaderBoardItem
             key={user.id}
+            place={index}
             userName={user.name}
             avatarURL={user.avatarURL}
             answers={calcAnswers(user)}
@@ -28,7 +29,11 @@ function LeaderBoard(props) {
 function mapStateToProps({ questions, users }) {
   return {
     questions,
-    users
+    users: Object.values(users).sort((userA, userB) => {
+      let scoreA = userA.questions.length + Object.keys(userA.answers).length;
+      let scoreB = userB.questions.length + Object.keys(userB.answers).length;
+      return scoreB - scoreA;
+    })
   };
 }
 
