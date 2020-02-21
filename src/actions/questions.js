@@ -2,7 +2,7 @@ import { _saveQuestion, _saveQuestionAnswer } from "../utils/_DATA";
 
 export const RECIVE_QUESTIONS = "RECIVE_QUESTIONS";
 export const ADD_QUESTION = "ADD_QUESTION";
-export const ADD_ANSWER = "ADD_ANSWER";
+export const ADD_QUESTIONS_ANSWER = "ADD_QUESTIONS_ANSWER";
 
 export function reciveQuestions(questions) {
   return {
@@ -18,10 +18,12 @@ function addQuestion(question) {
   };
 }
 
-function addAnswer(questions) {
+function addAnswerToQuestions(authedUser, qid, answer) {
   return {
-    type: ADD_ANSWER,
-    questions
+    type: ADD_QUESTIONS_ANSWER,
+    authedUser,
+    qid,
+    answer
   };
 }
 
@@ -37,7 +39,7 @@ export function handleAddQuestion(optionOneText, optionTwoText) {
   };
 }
 
-export function handleAddAnswer(qid, answer) {
+export function handleAddAnswerToQuestions(qid, answer) {
   return (dispatch, getState) => {
     const { authedUser } = getState();
 
@@ -45,6 +47,8 @@ export function handleAddAnswer(qid, answer) {
       authedUser,
       qid,
       answer
-    }).then(questions => dispatch(addAnswer(questions)));
+    })
+      .then(dispatch(addAnswerToQuestions(authedUser, qid, answer)))
+      .catch(error => console.log(error));
   };
 }

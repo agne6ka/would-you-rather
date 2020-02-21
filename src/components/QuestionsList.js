@@ -46,8 +46,8 @@ class QuestionsList extends Component {
   render() {
     const { users, authedUser, questions } = this.props;
 
-    const handleChange = (event, newValue) => {
-      this.setState({ value: newValue });
+    const handleChange = (event, newPosition) => {
+      this.setState({ value: newPosition });
     };
 
     return (
@@ -86,15 +86,15 @@ class QuestionsList extends Component {
           {authedUser &&
             Object.entries(questions).length !== 0 &&
             Object.keys(users[authedUser].answers).map(answerId => {
-              const author = questions[answerId].author;
+              const question = questions.find(x => x.id === answerId);
               return (
                 <QuestionItem
                   key={answerId}
                   id={answerId}
-                  userName={users[author].name}
-                  avatarURL={users[author].avatarURL}
-                  optionOne={questions[answerId].optionOne.text}
-                  optionTwo={questions[answerId].optionTwo.text}
+                  userName={users[question.author].name}
+                  avatarURL={users[question.author].avatarURL}
+                  optionOne={question.optionOne.text}
+                  optionTwo={question.optionTwo.text}
                 />
               );
             })}
@@ -106,7 +106,9 @@ class QuestionsList extends Component {
 
 function mapStateToProps({ authedUser, questions, users }) {
   return {
-    questions,
+    questions: Object.values(questions).sort(
+      (a, b) => b.timestamp - a.timestamp
+    ),
     users,
     authedUser
   };

@@ -72,9 +72,11 @@ function LeaderBoardItem(props) {
     <div>
       <Card className={classes.root}>
         <CardContent>
-          <div className={classes.medal}>
-            <Image src={`/img/medal_${place + 1}.svg`} />
-          </div>
+          {place < 3 && (
+            <div className={classes.medal}>
+              <Image src={`/img/medal_${place + 1}.svg`} />
+            </div>
+          )}
           <Avatar
             variant="rounded"
             className={classes.media}

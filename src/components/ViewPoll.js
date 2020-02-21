@@ -11,7 +11,8 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import { handleAddAnswer } from "../actions/questions";
+import { handleAddAnswerToQuestions } from "../actions/questions";
+import { handleAddAnswerToUsers } from "../actions/users";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,8 +48,11 @@ function ViewPoll(props) {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    props.dispatch(handleAddAnswer(param.id, value));
+    props.dispatch(handleAddAnswerToQuestions(param.id, value));
+    props.dispatch(handleAddAnswerToUsers(param.id, value));
   };
+
+  //ToDo: check the non existing question => if exist do destructering if not 404
   return (
     <div className="QuestionItem">
       <Card className={classes.root}>
