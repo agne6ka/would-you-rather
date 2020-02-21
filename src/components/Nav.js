@@ -40,18 +40,13 @@ function Nav(props) {
   const open = Boolean(anchorEl);
   const { userData, logout } = props;
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
+  const handleMenu = event => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  const handleChange = (e, newValue) => setValue(newValue);
+  const handleLogout = () => {
+    logout();
     setAnchorEl(null);
   };
-
-  const handleChange = (e, newValue) => {
-    setValue(newValue);
-  };
-  const handleLogout = () => logout();
 
   return (
     <div className={classes.root}>
