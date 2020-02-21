@@ -13,6 +13,7 @@ import NotFoundPage from "./NotFoundPage";
 import LeaderBoard from "./LeaderBoard";
 import { handleUsersData, handleQuestionsData } from "../actions/shared";
 import ViewPoll from "./ViewPoll";
+import { setAuthedUser } from "../actions/authedUser";
 
 const theme = createMuiTheme({
   palette: {
@@ -39,17 +40,19 @@ const useStyles = makeStyles(theme => ({
 
 function App(props) {
   const classes = useStyles();
+  const { dispatch, authedUser, users } = props;
+  const logout = () => dispatch(setAuthedUser(""));
   useEffect(() => {
-    props.dispatch(handleUsersData());
-    props.dispatch(handleQuestionsData());
+    dispatch(handleUsersData());
+    dispatch(handleQuestionsData());
   }, []);
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Nav />
+        <Nav userData={authedUser ? users[authedUser] : null} logout={logout} />
         <Grid container justify="center" className={classes.background}>
           <Grid item xs={6} className={classes.margin}>
-            {!props.authedUser ? (
+            {!authedUser ? (
               <Login />
             ) : (
               <Switch>

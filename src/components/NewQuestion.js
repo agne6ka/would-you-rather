@@ -6,6 +6,7 @@ import { handleAddQuestion } from "../actions/questions";
 import Button from "@material-ui/core/Button";
 import { Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -36,11 +37,16 @@ function NewQuestion(props) {
   const classes = useStyles();
   const [textOne, setTextOne] = useState("");
   const [textTwo, setTextTwo] = useState("");
+  const [toHome, setToHome] = useState(false);
   const handleSubmit = e => {
     e.preventDefault();
     props.dispatch(handleAddQuestion(textOne, textTwo));
+    setToHome(true);
   };
 
+  if (toHome === true) {
+    return <Redirect to="/" />;
+  }
   return (
     <div>
       <Typography

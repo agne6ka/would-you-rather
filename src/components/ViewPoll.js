@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,6 +13,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import { handleAddAnswerToQuestions } from "../actions/questions";
 import { handleAddAnswerToUsers } from "../actions/users";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,7 +42,8 @@ function ViewPoll(props) {
   let param = useParams();
   const { author, optionOne, optionTwo } = props.questions[param.id];
   const { avatarURL, name } = props.users[author];
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = useState("");
+  const [toHome, setToHome] = useState(false);
 
   const handleChange = event => {
     setValue(event.target.value);
@@ -50,9 +52,13 @@ function ViewPoll(props) {
     e.preventDefault();
     props.dispatch(handleAddAnswerToQuestions(param.id, value));
     props.dispatch(handleAddAnswerToUsers(param.id, value));
+    setToHome(true);
   };
 
   //ToDo: check the non existing question => if exist do destructering if not 404
+  if (toHome === true) {
+    return <Redirect to="/" />;
+  }
   return (
     <div className="QuestionItem">
       <Card className={classes.root}>

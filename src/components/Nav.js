@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { useLocation, Switch, Route, NavLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
+import Avatar from "@material-ui/core/Avatar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Tabs from "@material-ui/core/Tabs";
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Nav() {
+function Nav(props) {
   let location = useLocation().pathname;
   const classes = useStyles();
   const paths = ["/", "/new", "/leaderboard"];
@@ -38,8 +38,7 @@ function Nav() {
     paths.indexOf(location) > 0 ? paths.indexOf(location) : 0
   );
   const open = Boolean(anchorEl);
-
-  //ToDo: fix 404 `Tabs component is invalid` error
+  const { userData, logout } = props;
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -52,6 +51,7 @@ function Nav() {
   const handleChange = (e, newValue) => {
     setValue(newValue);
   };
+  const handleLogout = () => logout();
 
   return (
     <div className={classes.root}>
@@ -76,35 +76,39 @@ function Nav() {
             <Route path={paths[2]} />
           </Switch>
           <div>
-            <Typography variant="subtitle1" className={classes.text}>
-              Hello User
-            </Typography>
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Menu>
+            {userData && (
+              <Fragment>
+                <Typography variant="subtitle1" className={classes.text}>
+                  Hello, {userData.name}
+                </Typography>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <Avatar alt={userData.name} src={userData.avatarURL} />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </Fragment>
+            )}
           </div>
         </Toolbar>
       </AppBar>
