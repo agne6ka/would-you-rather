@@ -14,7 +14,7 @@ import Image from "material-ui-image";
 const useStyles = makeStyles(theme => ({
   root: {
     maxWidth: "100%",
-    margin: "20px auto",
+    margin: "0 auto 25px",
     position: "relative"
   },
   media: {

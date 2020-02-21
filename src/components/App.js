@@ -14,6 +14,7 @@ import LeaderBoard from "./LeaderBoard";
 import { handleUsersData, handleQuestionsData } from "../actions/shared";
 import ViewPoll from "./ViewPoll";
 import { setAuthedUser } from "../actions/authedUser";
+import { Fragment } from "react";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,14 +30,15 @@ const theme = createMuiTheme({
   }
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   margin: {
     marginTop: 100
   },
   background: {
-    backgroundColor: "#EFEFEF"
+    backgroundColor: "#EFEFEF",
+    minHeight: "100vh"
   }
-}));
+});
 
 function App(props) {
   const classes = useStyles();
@@ -49,22 +51,27 @@ function App(props) {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Nav userData={authedUser ? users[authedUser] : null} logout={logout} />
-        <Grid container justify="center" className={classes.background}>
-          <Grid item xs={6} className={classes.margin}>
-            {!authedUser ? (
-              <Login />
-            ) : (
-              <Switch>
-                <Route exact path="/" component={QuestionsList} />
-                <Route path="/new" component={NewQuestion} />
-                <Route path="/leaderboard" component={LeaderBoard} />
-                <Route path="/question/:id" component={ViewPoll} />
-                <Route component={NotFoundPage} />
-              </Switch>
-            )}
+        <div className={classes.background}>
+          <Nav
+            userData={authedUser ? users[authedUser] : null}
+            logout={logout}
+          />
+          <Grid container justify="center">
+            <Grid item xs={6} className={classes.margin}>
+              {!authedUser ? (
+                <Login />
+              ) : (
+                <Switch>
+                  <Route exact path="/" component={QuestionsList} />
+                  <Route path="/new" component={NewQuestion} />
+                  <Route path="/leaderboard" component={LeaderBoard} />
+                  <Route path="/question/:id" component={ViewPoll} />
+                  <Route component={NotFoundPage} />
+                </Switch>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       </ThemeProvider>
     </Router>
   );
