@@ -20,7 +20,7 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box p={2}>{children}</Box>}
     </Typography>
   );
 }
@@ -78,6 +78,7 @@ class QuestionsList extends Component {
                   avatarURL={users[question.author].avatarURL}
                   optionOne={question.optionOne.text}
                   optionTwo={question.optionTwo.text}
+                  tab="unanswered"
                 />
               );
             })}
@@ -95,6 +96,7 @@ class QuestionsList extends Component {
                   avatarURL={users[question.author].avatarURL}
                   optionOne={question.optionOne.text}
                   optionTwo={question.optionTwo.text}
+                  tab="answered"
                 />
               );
             })}

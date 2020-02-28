@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 function QuestionItem(props) {
   const classes = useStyles();
-  const { id, userName, avatarURL, optionOne, optionTwo } = props;
+  const { id, userName, avatarURL, optionOne, optionTwo, tab } = props;
   return (
     <div className="QuestionItem">
       <Card className={classes.root}>
@@ -51,7 +51,10 @@ function QuestionItem(props) {
             size="small"
             color="secondary"
             component={Link}
-            to={`/question/${id}`}
+            to={{
+              pathname: `/question/${id}`,
+              state: { tab: tab }
+            }}
           >
             VIEW POLL
           </Button>
