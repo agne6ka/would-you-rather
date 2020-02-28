@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { handleAddQuestion } from "../actions/questions";
+import { handleAddQuestionToUsers } from "../actions/users";
+import { handleAddQuestionToQuestions } from "../actions/questions";
 import Button from "@material-ui/core/Button";
 import { Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -40,7 +41,8 @@ function NewQuestion(props) {
   const [toHome, setToHome] = useState(false);
   const handleSubmit = e => {
     e.preventDefault();
-    props.dispatch(handleAddQuestion(textOne, textTwo));
+    props.dispatch(handleAddQuestionToQuestions(textOne, textTwo));
+    props.dispatch(handleAddQuestionToUsers(textOne, textTwo));
     setToHome(true);
   };
 

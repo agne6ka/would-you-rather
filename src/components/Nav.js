@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useLocation, Switch, Route, NavLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -30,16 +30,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Nav(props) {
-  let location = useLocation().pathname;
   const classes = useStyles();
-  const paths = ["/", "/new", "/leaderboard"];
+  let location = useLocation().pathname;
+  const paths = ["/", "/add", "/leaderboard"];
   const [anchorEl, setAnchorEl] = useState(null);
-  const [value, setValue] = useState(
-    paths.indexOf(location) > 0 ? paths.indexOf(location) : 0
-  );
+  const [value, setValue] = useState(0);
   const open = Boolean(anchorEl);
   const { userData, logout } = props;
-
   const handleMenu = event => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
   const handleChange = (e, newValue) => setValue(newValue);
@@ -47,6 +44,9 @@ function Nav(props) {
     logout();
     setAnchorEl(null);
   };
+  useEffect(() => {
+    setValue(paths.indexOf(location) > 0 ? paths.indexOf(location) : 0);
+  }, [paths, location]);
 
   return (
     <div className={classes.root}>

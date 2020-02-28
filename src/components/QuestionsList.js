@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
@@ -7,6 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import QuestionItem from "./QuestionItem";
+import { useLocation } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -38,72 +39,68 @@ function a11yProps(index) {
   };
 }
 
-class QuestionsList extends Component {
-  state = {
-    value: 0
+function QuestionsList(props) {
+  let location = useLocation();
+  const initState = location.state ? parseInt(location.state.tab) : 0;
+  const [value, setValue] = useState(initState);
+  const { users, authedUser, questions } = props;
+  const handleChange = (event, newPosition) => {
+    setValue(newPosition);
   };
 
-  render() {
-    const { users, authedUser, questions } = this.props;
-
-    const handleChange = (event, newPosition) => {
-      this.setState({ value: newPosition });
-    };
-
-    return (
-      <div className="QuestionsList">
-        <AppBar position="static" color="default">
-          <Tabs
-            value={this.state.value}
-            onChange={handleChange}
-            indicatorColor="secondary"
-            textColor="secondary"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            <Tab label="UNANSWERED" {...a11yProps(0)} />
-            <Tab label="ANSWERED" {...a11yProps(1)} />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={this.state.value} index={0}>
-          {authedUser &&
-            Object.values(questions).map(question => {
-              if (Object.keys(users[authedUser].answers).includes(question.id))
-                return null;
-              return (
-                <QuestionItem
-                  key={question.id}
-                  id={question.id}
-                  userName={users[question.author].name}
-                  avatarURL={users[question.author].avatarURL}
-                  optionOne={question.optionOne.text}
-                  optionTwo={question.optionTwo.text}
-                  tab="unanswered"
-                />
-              );
-            })}
-        </TabPanel>
-        <TabPanel value={this.state.value} index={1}>
-          {authedUser &&
-            Object.entries(questions).length !== 0 &&
-            Object.keys(users[authedUser].answers).map(answerId => {
-              const question = questions.find(x => x.id === answerId);
-              return (
-                <QuestionItem
-                  key={answerId}
-                  id={answerId}
-                  userName={users[question.author].name}
-                  avatarURL={users[question.author].avatarURL}
-                  optionOne={question.optionOne.text}
-                  optionTwo={question.optionTwo.text}
-                  tab="answered"
-                />
-              );
-            })}
-        </TabPanel>
-      </div>
-    );
-  }
+  return (
+    <div className="QuestionsList">
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          textColor="secondary"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+        >
+          <Tab label="UNANSWERED" {...a11yProps(0)} />
+          <Tab label="ANSWERED" {...a11yProps(1)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={value} index={0}>
+        {authedUser &&
+          Object.values(questions).map(question => {
+            if (Object.keys(users[authedUser].answers).includes(question.id))
+              return null;
+            return (
+              <QuestionItem
+                key={question.id}
+                id={question.id}
+                userName={users[question.author].name}
+                avatarURL={users[question.author].avatarURL}
+                optionOne={question.optionOne.text}
+                optionTwo={question.optionTwo.text}
+                tab="0"
+              />
+            );
+          })}
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        {authedUser &&
+          Object.entries(questions).length !== 0 &&
+          Object.keys(users[authedUser].answers).map(answerId => {
+            const question = questions.find(x => x.id === answerId);
+            return (
+              <QuestionItem
+                key={answerId}
+                id={answerId}
+                userName={users[question.author].name}
+                avatarURL={users[question.author].avatarURL}
+                optionOne={question.optionOne.text}
+                optionTwo={question.optionTwo.text}
+                tab="1"
+              />
+            );
+          })}
+      </TabPanel>
+    </div>
+  );
 }
 
 function mapStateToProps({ authedUser, questions, users }) {

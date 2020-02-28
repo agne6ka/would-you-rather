@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
 import { Link, useParams, useLocation, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -65,7 +65,7 @@ function ViewPoll(props) {
       <Redirect
         to={{
           pathname: "/",
-          state: { tab: location.state.tab }
+          state: { tab: 1 }
         }}
       />
     );
@@ -92,14 +92,14 @@ function ViewPoll(props) {
           <Typography gutterBottom variant="h5" component="h2">
             Would you rather?
           </Typography>
-          {location.state.tab === "answered" ? (
+          {location.state.tab === "1" ? (
             <Fragment>
               <Slider
                 className={classes.slider}
                 color="secondary"
                 defaultValue={
-                  (optionOne.votes.length / optionOne.votes.length +
-                    optionTwo.votes.length) *
+                  (optionOne.votes.length /
+                    (optionOne.votes.length + optionTwo.votes.length)) *
                   100
                 }
                 getAriaValueText={valuetext}
@@ -119,8 +119,8 @@ function ViewPoll(props) {
                 className={classes.slider}
                 color="secondary"
                 defaultValue={
-                  (optionTwo.votes.length / optionOne.votes.length +
-                    optionTwo.votes.length) *
+                  (optionTwo.votes.length /
+                    (optionOne.votes.length + optionTwo.votes.length)) *
                   100
                 }
                 getAriaValueText={valuetext}

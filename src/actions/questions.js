@@ -27,7 +27,7 @@ function addAnswerToQuestions(authedUser, qid, answer) {
   };
 }
 
-export function handleAddQuestion(optionOneText, optionTwoText) {
+export function handleAddQuestionToQuestions(optionOneText, optionTwoText) {
   return (dispatch, getState) => {
     const { authedUser } = getState();
 

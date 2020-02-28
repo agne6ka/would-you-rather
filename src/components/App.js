@@ -11,13 +11,9 @@ import NotFoundPage from "./NotFoundPage";
 import LeaderBoard from "./LeaderBoard";
 import { handleUsersData, handleQuestionsData } from "../actions/shared";
 import ViewPoll from "./ViewPoll";
+import PrivateRoute from "./PrivateRoute";
 import { setAuthedUser } from "../actions/authedUser";
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const theme = createMuiTheme({
   palette: {
@@ -46,14 +42,6 @@ const useStyles = makeStyles({
 function App(props) {
   const classes = useStyles();
   const { dispatch, authedUser, users } = props;
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-      {...rest}
-      render={props =>
-        authedUser ? <Component {...props} /> : <Redirect to="/login" />
-      }
-    />
-  );
   const logout = () => dispatch(setAuthedUser(""));
   useEffect(() => {
     dispatch(handleUsersData());
@@ -70,12 +58,36 @@ function App(props) {
           <Grid container justify="center">
             <Grid item xs={6} className={classes.margin}>
               <Switch>
-                <Route path="/login" component={Login} />
-                <PrivateRoute exact path="/" component={QuestionsList} />
-                <PrivateRoute path="/new" component={NewQuestion} />
-                <PrivateRoute path="/leaderboard" component={LeaderBoard} />
-                <PrivateRoute path="/question/:id" component={ViewPoll} />
-                <Route component={NotFoundPage} />
+                <Route
+                  path="/login"
+                  component={Login}
+                  authedUser={authedUser}
+                />
+                <PrivateRoute
+                  exact
+                  path="/"
+                  component={QuestionsList}
+                  authedUser={authedUser}
+                />
+                <PrivateRoute
+                  path="/add"
+                  component={NewQuestion}
+                  authedUser={authedUser}
+                />
+                <PrivateRoute
+                  path="/leaderboard"
+                  component={LeaderBoard}
+                  authedUser={authedUser}
+                />
+                <PrivateRoute
+                  path="/question/:id"
+                  component={ViewPoll}
+                  authedUser={authedUser}
+                />
+                <PrivateRoute
+                  component={NotFoundPage}
+                  authedUser={authedUser}
+                />
               </Switch>
             </Grid>
           </Grid>
