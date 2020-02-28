@@ -1,8 +1,7 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import { useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
@@ -15,7 +14,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Slider from "@material-ui/core/Slider";
 import { handleAddAnswerToQuestions } from "../actions/questions";
 import { handleAddAnswerToUsers } from "../actions/users";
-import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,26 +50,31 @@ function ViewPoll(props) {
   let location = useLocation();
   const { author, optionOne, optionTwo } = props.questions[param.id];
   const { avatarURL, name } = props.users[author];
-  const [value, setValue] = useState("");
   const [toHome, setToHome] = useState(false);
-  const handleChange = event => {
-    setValue(event.target.value);
-  };
+  const [value, setValue] = useState("");
+  const handleChange = event => setValue(event.target.value);
   const handleSubmit = e => {
     e.preventDefault();
     props.dispatch(handleAddAnswerToQuestions(param.id, value));
     props.dispatch(handleAddAnswerToUsers(param.id, value));
     setToHome(true);
   };
-  //ToDo: check the non existing question => if exist do destructering if not 404
+
   if (toHome === true) {
-    return <Redirect to="/" />;
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+          state: { tab: location.state.tab }
+        }}
+      />
+    );
   }
   return (
     <div className="QuestionItem">
       <Link
         to={{
-          pathname: `/`,
+          pathname: "/",
           state: { tab: location.state.tab }
         }}
         color="inherit"

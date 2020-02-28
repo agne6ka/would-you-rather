@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -14,7 +12,12 @@ import LeaderBoard from "./LeaderBoard";
 import { handleUsersData, handleQuestionsData } from "../actions/shared";
 import ViewPoll from "./ViewPoll";
 import { setAuthedUser } from "../actions/authedUser";
-import { Fragment } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch
+} from "react-router-dom";
 
 const theme = createMuiTheme({
   palette: {
@@ -43,6 +46,14 @@ const useStyles = makeStyles({
 function App(props) {
   const classes = useStyles();
   const { dispatch, authedUser, users } = props;
+  const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+      render={props =>
+        authedUser ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
   const logout = () => dispatch(setAuthedUser(""));
   useEffect(() => {
     dispatch(handleUsersData());
@@ -58,17 +69,14 @@ function App(props) {
           />
           <Grid container justify="center">
             <Grid item xs={6} className={classes.margin}>
-              {!authedUser ? (
-                <Login />
-              ) : (
-                <Switch>
-                  <Route exact path="/" component={QuestionsList} />
-                  <Route path="/new" component={NewQuestion} />
-                  <Route path="/leaderboard" component={LeaderBoard} />
-                  <Route path="/question/:id" component={ViewPoll} />
-                  <Route component={NotFoundPage} />
-                </Switch>
-              )}
+              <Switch>
+                <Route path="/login" component={Login} />
+                <PrivateRoute exact path="/" component={QuestionsList} />
+                <PrivateRoute path="/new" component={NewQuestion} />
+                <PrivateRoute path="/leaderboard" component={LeaderBoard} />
+                <PrivateRoute path="/question/:id" component={ViewPoll} />
+                <Route component={NotFoundPage} />
+              </Switch>
             </Grid>
           </Grid>
         </div>
