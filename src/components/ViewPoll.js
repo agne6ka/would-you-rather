@@ -48,8 +48,13 @@ function ViewPoll(props) {
   const classes = useStyles();
   let param = useParams();
   let location = useLocation();
-  const { author, optionOne, optionTwo } = props.questions[param.id];
-  const { avatarURL, name } = props.users[author];
+  let tabState = location.state === undefined ? 0 : location.state.tab;
+  const { author, optionOne, optionTwo } = Object.keys(
+    props.questions
+  ).includes(param.id)
+    ? props.questions[param.id]
+    : "";
+  const { avatarURL, name } = author ? props.users[author] : "";
   const [toHome, setToHome] = useState(false);
   const [value, setValue] = useState("");
   const handleChange = event => setValue(event.target.value);
@@ -59,6 +64,8 @@ function ViewPoll(props) {
     props.dispatch(handleAddAnswerToUsers(param.id, value));
     setToHome(true);
   };
+
+  if (author === undefined) return <Redirect to="/404" />;
 
   if (toHome === true) {
     return (
@@ -72,10 +79,11 @@ function ViewPoll(props) {
   }
   return (
     <div className="QuestionItem">
+      {console.log(author)}
       <Link
         to={{
           pathname: "/",
-          state: { tab: location.state.tab }
+          state: { tab: tabState }
         }}
         color="inherit"
       >
@@ -92,7 +100,7 @@ function ViewPoll(props) {
           <Typography gutterBottom variant="h5" component="h2">
             Would you rather?
           </Typography>
-          {location.state.tab === "1" ? (
+          {tabState === "1" ? (
             <Fragment>
               <Slider
                 className={classes.slider}
