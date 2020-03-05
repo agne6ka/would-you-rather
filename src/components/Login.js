@@ -30,9 +30,10 @@ const Login = props => {
     props.dispatch(setAuthedUser(event.target.value));
     setToHome(true);
   };
+  const { from } = props.location.state || { from: { pathname: "/" } };
 
   if (toHome === true) {
-    return <Redirect to="/" />;
+    return <Redirect to={from.pathname} />;
   }
   return (
     <div>
