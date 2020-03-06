@@ -79,7 +79,6 @@ function ViewPoll(props) {
   }
   return (
     <div className="QuestionItem">
-      {console.log(author)}
       <Link
         to={{
           pathname: "/",

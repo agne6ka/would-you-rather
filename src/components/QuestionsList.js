@@ -83,13 +83,13 @@ function QuestionsList(props) {
       </TabPanel>
       <TabPanel value={value} index={1}>
         {authedUser &&
-          Object.entries(questions).length !== 0 &&
-          Object.keys(users[authedUser].answers).map(answerId => {
-            const question = questions.find(x => x.id === answerId);
+          Object.values(questions).map(question => {
+            const userAnswers = users[authedUser].answers[question.id];
+            if (!userAnswers) return <div></div>;
             return (
               <QuestionItem
-                key={answerId}
-                id={answerId}
+                key={question.id}
+                id={question.id}
                 userName={users[question.author].name}
                 avatarURL={users[question.author].avatarURL}
                 optionOne={question.optionOne.text}
