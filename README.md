@@ -1,8 +1,14 @@
 # Would you rather
 
-//ToDo: add description
+The project contains a simple game app that allows you to add two options to the `would you rather` question. You can generate many questions. The more, the better. Other users can answer your questions. The winner is a user who created and answered most questions.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Install dependencies
+
+To install project run command:
+
+### `npm install`
 
 ## Available Scripts
 
