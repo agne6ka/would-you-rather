@@ -104,16 +104,20 @@ function ViewPoll(props) {
     props.dispatch(handleAddAnswerToUsers(param.id, value));
     setToHome(true);
   };
-  const procentFirstAnswered = Math.floor(
-    (optionOne.votes.length /
-      (optionOne.votes.length + optionTwo.votes.length)) *
-      100
-  );
-  const procentSecondAnswered = Math.floor(
-    (optionTwo.votes.length /
-      (optionOne.votes.length + optionTwo.votes.length)) *
-      100
-  );
+  const procentFirstAnswered = author
+    ? Math.floor(
+        (optionOne.votes.length /
+          (optionOne.votes.length + optionTwo.votes.length)) *
+          100
+      )
+    : "";
+  const procentSecondAnswered = author
+    ? Math.floor(
+        (optionTwo.votes.length /
+          (optionOne.votes.length + optionTwo.votes.length)) *
+          100
+      )
+    : "";
 
   if (author === undefined) return <Redirect to="/404" />;
 
