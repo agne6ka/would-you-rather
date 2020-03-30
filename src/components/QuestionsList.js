@@ -85,7 +85,7 @@ function QuestionsList(props) {
         {authedUser &&
           Object.values(questions).map(question => {
             const userAnswers = users[authedUser].answers[question.id];
-            if (!userAnswers) return <div></div>;
+            if (!userAnswers) return <div key={question.id}></div>;
             return (
               <QuestionItem
                 key={question.id}

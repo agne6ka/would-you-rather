@@ -11,7 +11,6 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import Slider from "@material-ui/core/Slider";
 import { handleAddAnswerToQuestions } from "../actions/questions";
 import { handleAddAnswerToUsers } from "../actions/users";
 
@@ -37,6 +36,46 @@ const useStyles = makeStyles(theme => ({
   },
   slider: {
     width: "70%"
+  },
+  procentContainer: {
+    position: "relative",
+    height: "20px",
+    background: "rgba(246,174,75,0.5)",
+    width: "85%",
+    display: "inline-block"
+  },
+  procentInfo: {
+    backgroundColor: "#f44336",
+    height: "20px",
+    display: "block",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    fontSize: "15px",
+    textAlign: "center",
+    color: "#fff",
+    fontWeight: 600
+  },
+  title: {
+    marginBottom: "50px"
+  },
+  itemOption: {
+    margin: "5px 0",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  optionContainer: {
+    width: "100%"
+  },
+  optionVotes: {
+    width: "50px",
+    marginLeft: "20px",
+    display: "inline-block"
+  },
+  choosedImg: {
+    width: "70px",
+    paddingRight: "20px"
   }
 }));
 
@@ -54,7 +93,8 @@ function ViewPoll(props) {
   ).includes(param.id)
     ? props.questions[param.id]
     : "";
-  const { avatarURL, name } = author ? props.users[author] : "";
+  const { avatarURL, name, answers } = author ? props.users[author] : "";
+  const answer = props.users[props.authedUser].answers[param.id];
   const [toHome, setToHome] = useState(false);
   const [value, setValue] = useState("");
   const handleChange = event => setValue(event.target.value);
@@ -64,6 +104,16 @@ function ViewPoll(props) {
     props.dispatch(handleAddAnswerToUsers(param.id, value));
     setToHome(true);
   };
+  const procentFirstAnswered = Math.floor(
+    (optionOne.votes.length /
+      (optionOne.votes.length + optionTwo.votes.length)) *
+      100
+  );
+  const procentSecondAnswered = Math.floor(
+    (optionTwo.votes.length /
+      (optionOne.votes.length + optionTwo.votes.length)) *
+      100
+  );
 
   if (author === undefined) return <Redirect to="/404" />;
 
@@ -96,53 +146,82 @@ function ViewPoll(props) {
             src={avatarURL}
           ></Avatar>
           <Typography variant="subtitle2">{name}:</Typography>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography
+            className={classes.title}
+            gutterBottom
+            variant="h5"
+            component="h2"
+          >
             Would you rather?
           </Typography>
           {tabState === "1" ? (
             <Fragment>
-              <Slider
-                className={classes.slider}
-                color="secondary"
-                defaultValue={
-                  (optionOne.votes.length /
-                    (optionOne.votes.length + optionTwo.votes.length)) *
-                  100
-                }
-                getAriaValueText={valuetext}
-                aria-labelledby="discrete-slider-always"
-                step={1}
-                marks
-                valueLabelDisplay="on"
-              />
-              <Typography gutterBottom variant="h5" component="h2">
-                {`${optionOne.votes.length}/${optionOne.votes.length +
-                  optionTwo.votes.length} `}
-              </Typography>
-              <Typography gutterBottom variant="h5" component="h2">
-                {optionOne.text}
-              </Typography>
-              <Slider
-                className={classes.slider}
-                color="secondary"
-                defaultValue={
-                  (optionTwo.votes.length /
-                    (optionOne.votes.length + optionTwo.votes.length)) *
-                  100
-                }
-                getAriaValueText={valuetext}
-                aria-labelledby="discrete-slider-always"
-                step={1}
-                marks
-                valueLabelDisplay="on"
-              />
-              <Typography gutterBottom variant="h5" component="h2">
-                {`${optionTwo.votes.length}/${optionOne.votes.length +
-                  optionTwo.votes.length} `}
-              </Typography>
-              <Typography gutterBottom variant="h5" component="h2">
-                {optionTwo.text}
-              </Typography>
+              <div className={classes.itemOption}>
+                <div className={classes.choosedImg}>
+                  {answer === "optionOne" && (
+                    <img alt="Choosed option one" src="/img/choosed.svg" />
+                  )}
+                </div>
+                <div className={classes.optionContainer}>
+                  <div className={classes.procentContainer}>
+                    <span
+                      className={classes.procentInfo}
+                      style={{ width: `${procentFirstAnswered}%` }}
+                    >
+                      {procentFirstAnswered + "%"}
+                    </span>
+                  </div>
+                  <Typography
+                    className={classes.optionVotes}
+                    gutterBottom
+                    variant="h5"
+                    component="h2"
+                  >
+                    {`${optionOne.votes.length}/${optionOne.votes.length +
+                      optionTwo.votes.length} `}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    * {optionOne.text}
+                  </Typography>
+                </div>
+              </div>
+              <div className={classes.itemOption}>
+                <div className={classes.choosedImg}>
+                  {answer === "optionTwo" && (
+                    <img alt="Choosed option two" src="/img/choosed.svg" />
+                  )}
+                </div>
+                <div className={classes.optionContainer}>
+                  <div className={classes.procentContainer}>
+                    <span
+                      className={classes.procentInfo}
+                      style={{ width: `${procentSecondAnswered}%` }}
+                    >
+                      {procentSecondAnswered + "%"}
+                    </span>
+                  </div>
+                  <Typography
+                    className={classes.optionVotes}
+                    gutterBottom
+                    variant="h5"
+                    component="h2"
+                  >
+                    {`${optionTwo.votes.length}/${optionOne.votes.length +
+                      optionTwo.votes.length} `}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    * {optionTwo.text}
+                  </Typography>
+                </div>
+              </div>
             </Fragment>
           ) : (
             <form onSubmit={handleSubmit}>
