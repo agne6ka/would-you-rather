@@ -39,10 +39,11 @@ function NewQuestion(props) {
   const [textOne, setTextOne] = useState("");
   const [textTwo, setTextTwo] = useState("");
   const [toHome, setToHome] = useState(false);
+  const { addQuestionToQuestions, addQuestionToUsers } = props;
   const handleSubmit = e => {
     e.preventDefault();
-    props.dispatch(handleAddQuestionToQuestions(textOne, textTwo));
-    props.dispatch(handleAddQuestionToUsers(textOne, textTwo));
+    addQuestionToQuestions(textOne, textTwo);
+    addQuestionToUsers(textOne, textTwo);
     setToHome(true);
   };
 
@@ -118,4 +119,16 @@ function NewQuestion(props) {
     </div>
   );
 }
-export default connect()(NewQuestion);
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addQuestionToQuestions: (textOne, textTwo) => {
+      dispatch(handleAddQuestionToQuestions(textOne, textTwo));
+    },
+    addQuestionToUsers: (textOne, textTwo) => {
+      dispatch(handleAddQuestionToUsers(textOne, textTwo));
+    }
+  };
+}
+
+export default connect(null, mapDispatchToProps)(NewQuestion);
