@@ -1,6 +1,12 @@
 import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
-import { Link, useParams, useLocation, Redirect } from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useLocation,
+  Redirect,
+  useHistory
+} from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -79,30 +85,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function valuetext(value) {
-  return value;
-}
-
 function ViewPoll(props) {
   const classes = useStyles();
-  let param = useParams();
-  let location = useLocation();
+  const param = useParams();
+  const location = useLocation();
+  const history = useHistory();
   let tabState = location.state === undefined ? 0 : location.state.tab;
   const { author, optionOne, optionTwo } = Object.keys(
     props.questions
   ).includes(param.id)
     ? props.questions[param.id]
     : "";
-  const { avatarURL, name, answers } = author ? props.users[author] : "";
+  const { avatarURL, name } = author ? props.users[author] : "";
   const answer = props.users[props.authedUser].answers[param.id];
-  const [toHome, setToHome] = useState(false);
   const [value, setValue] = useState("");
   const handleChange = event => setValue(event.target.value);
   const handleSubmit = e => {
     e.preventDefault();
     props.dispatch(handleAddAnswerToQuestions(param.id, value));
     props.dispatch(handleAddAnswerToUsers(param.id, value));
-    setToHome(true);
+    history.push({
+      pathname: location.pathname,
+      state: { tab: "1" }
+    });
   };
   const procentFirstAnswered = author
     ? Math.floor(
@@ -121,16 +126,6 @@ function ViewPoll(props) {
 
   if (author === undefined) return <Redirect to="/404" />;
 
-  if (toHome === true) {
-    return (
-      <Redirect
-        to={{
-          pathname: "/",
-          state: { tab: 1 }
-        }}
-      />
-    );
-  }
   return (
     <div className="QuestionItem">
       <Link

@@ -43,7 +43,7 @@ function QuestionsList(props) {
   let location = useLocation();
   const initState = location.state ? parseInt(location.state.tab) : 0;
   const [value, setValue] = useState(initState);
-  const { users, authedUser, questions } = props;
+  const { users, questions } = props;
   const handleChange = (event, newPosition) => {
     setValue(newPosition);
   };
@@ -64,9 +64,11 @@ function QuestionsList(props) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        {authedUser &&
+        {props.authedUser &&
           Object.values(questions).map(question => {
-            if (Object.keys(users[authedUser].answers).includes(question.id))
+            if (
+              Object.keys(users[props.authedUser].answers).includes(question.id)
+            )
               return null;
             return (
               <QuestionItem
@@ -82,9 +84,9 @@ function QuestionsList(props) {
           })}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {authedUser &&
+        {props.authedUser &&
           Object.values(questions).map(question => {
-            const userAnswers = users[authedUser].answers[question.id];
+            const userAnswers = users[props.authedUser].answers[question.id];
             if (!userAnswers) return <div key={question.id}></div>;
             return (
               <QuestionItem

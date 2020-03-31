@@ -46,7 +46,7 @@ function App(props) {
   useEffect(() => {
     dispatch(handleUsersData());
     dispatch(handleQuestionsData());
-  }, []);
+  }, [dispatch]);
   return (
     <Router>
       <ThemeProvider theme={theme}>
@@ -58,36 +58,12 @@ function App(props) {
           <Grid container justify="center">
             <Grid item xs={6} className={classes.margin}>
               <Switch>
-                <Route
-                  path="/login"
-                  component={Login}
-                  authedUser={authedUser}
-                />
-                <PrivateRoute
-                  exact
-                  path="/"
-                  component={QuestionsList}
-                  authedUser={authedUser}
-                />
-                <PrivateRoute
-                  path="/add"
-                  component={NewQuestion}
-                  authedUser={authedUser}
-                />
-                <PrivateRoute
-                  path="/leaderboard"
-                  component={LeaderBoard}
-                  authedUser={authedUser}
-                />
-                <PrivateRoute
-                  path="/question/:id"
-                  component={ViewPoll}
-                  authedUser={authedUser}
-                />
-                <PrivateRoute
-                  component={NotFoundPage}
-                  authedUser={authedUser}
-                />
+                <Route path="/login" component={Login} />
+                <PrivateRoute exact path="/" component={QuestionsList} />
+                <PrivateRoute path="/add" component={NewQuestion} />
+                <PrivateRoute path="/leaderboard" component={LeaderBoard} />
+                <PrivateRoute path="/question/:id" component={ViewPoll} />
+                <PrivateRoute component={NotFoundPage} />
               </Switch>
             </Grid>
           </Grid>

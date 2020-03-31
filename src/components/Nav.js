@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -111,4 +112,15 @@ function Nav(props) {
   );
 }
 
-export default Nav;
+function mapStateToProps({ questions, users }) {
+  return {
+    questions,
+    users: Object.values(users).sort((userA, userB) => {
+      let scoreA = userA.questions.length + Object.keys(userA.answers).length;
+      let scoreB = userB.questions.length + Object.keys(userB.answers).length;
+      return scoreB - scoreA;
+    })
+  };
+}
+
+export default connect(mapStateToProps)(Nav);
